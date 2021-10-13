@@ -3,21 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tensorflow.keras.layers import Conv2D, Input, Dense, MaxPool2D, BatchNormalization, GlobalAvgPool2D
 from tensorflow.python.ops.gen_array_ops import batch_to_space
-
-def display_some_examples(examples, labels):
-    plt.figure(figsize=(10, 10))
-
-    for i in range(25):
-        idx = np.random.randint(0, examples.shape[0] - 1)
-        img = examples[idx]
-        lbl = labels[idx]
-
-        plt.subplot(5, 5, i + 1)
-        plt.title(str(lbl))
-        plt.tight_layout()
-        plt.imshow(img, cmap="gray")
-
-    plt.show()
+from dl_models import functional_model
+from my_utils import display_some_examples
 
 seq_model = tf.keras.Sequential([
     tf.keras.layers.Input(shape=(28, 28, 1)),
@@ -32,26 +19,6 @@ seq_model = tf.keras.Sequential([
     tf.keras.layers.Dense(64, activation="relu"),
     tf.keras.layers.Dense(10, activation="softmax"),
 ])
-
-def functional_model():
-    my_input = tf.keras.layers.Input(shape=(28, 28, 1))
-    x = tf.keras.layers.Conv2D(32, (3, 3), activation="relu")(my_input)
-    x = tf.keras.layers.Conv2D(64, (3, 3), activation="relu")(x)
-    x = tf.keras.layers.MaxPool2D()(x)
-    x = tf.keras.layers.BatchNormalization()(x)
-
-    x = tf.keras.layers.Conv2D(128, (3, 3), activation="relu")(x)
-    x = tf.keras.layers.MaxPool2D()(x)
-    x = tf.keras.layers.BatchNormalization()(x)
-
-    x = tf.keras.layers.GlobalAvgPool2D()(x)
-    x = tf.keras.layers.Dense(64, activation="relu")(x)
-    x = tf.keras.layers.Dense(10, activation="softmax")(x)
-
-    model = tf.keras.Model(inputs=my_input, outputs=x)
-
-    return model
-
 
 if __name__ == "__main__":
 
